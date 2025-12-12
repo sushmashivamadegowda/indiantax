@@ -2,6 +2,32 @@
 
 A complete web application to calculate Indian Income Tax for Financial Year 2024-25. Compare Old vs New Tax Regime with detailed breakdowns and smart recommendations.
 
+## ⚡ Quick Start (Run in 2 mins)
+
+### 1. Get the Code
+```bash
+git clone https://github.com/sushmashivamadegowda/indiantax.git
+cd indiantax
+```
+
+### 2. Run Backend (Terminal 1)
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start Server
+python manage.py runserver
+```
+
+### 3. Run Frontend (Terminal 2)
+```bash
+cd frontend
+npm install
+npm start
+```
+
+The app will open at `http://localhost:3000`.
+
 ## 🚀 Features
 
 - **Dual Regime Comparison**: Calculate tax under both Old and New Tax Regime
