@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateTDS } from '../utils/taxCalculators';
 
 const TDSCalculator = () => {
     const [formData, setFormData] = useState({ salary: '', investments: '' });
@@ -7,12 +7,16 @@ const TDSCalculator = () => {
 
     const isValid = formData.salary && !isNaN(formData.salary) && Number(formData.salary) > 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
             if (!isValid) return;
-            const response = await axios.post('http://localhost:8000/api/calculate-tds/', formData);
-            setResult(response.data);
+            // calculated based on simplified New Regime estimation
+            const res = calculateTDS(
+                parseFloat(formData.salary),
+                parseFloat(formData.investments) || 0
+            );
+            setResult(res);
         } catch (error) {
             console.error(error);
         }

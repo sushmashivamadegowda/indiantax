@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateSalaryBreakdown } from '../utils/taxCalculators';
 
 const SalaryBreakdownCalculator = () => {
     const [ctc, setCtc] = useState('');
@@ -9,7 +9,7 @@ const SalaryBreakdownCalculator = () => {
 
     const isValid = ctc && !isNaN(ctc) && Number(ctc) > 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!isValid) return;
 
@@ -18,12 +18,15 @@ const SalaryBreakdownCalculator = () => {
         setResult(null);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/calculate-salary-breakdown/', { ctc });
-            setResult(response.data);
+            // Simulate API delay
+            setTimeout(() => {
+                const res = calculateSalaryBreakdown(parseFloat(ctc));
+                setResult(res);
+                setLoading(false);
+            }, 500);
         } catch (error) {
             console.error(error);
-            setError('Failed to calculate. Please ensure the backend server is running and try again.');
-        } finally {
+            setError('Failed to calculate. Please check your inputs.');
             setLoading(false);
         }
     };

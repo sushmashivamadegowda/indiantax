@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateHRAExemption } from '../utils/taxCalculators';
 
 const HRACalculator = () => {
     const [formData, setFormData] = useState({
@@ -12,14 +12,19 @@ const HRACalculator = () => {
 
     const isValid = formData.basic && formData.hra && formData.rent;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
             // We can assume valid if button is enabled, but good practice to check logic
             if (!isValid) return;
 
-            const response = await axios.post('http://localhost:8000/api/calculate-hra/', formData);
-            setResult(response.data);
+            const res = calculateHRAExemption(
+                parseFloat(formData.basic),
+                parseFloat(formData.hra),
+                parseFloat(formData.rent),
+                formData.city
+            );
+            setResult(res);
         } catch (error) {
             console.error(error);
         }

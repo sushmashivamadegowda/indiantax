@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculate80CSuggestions } from '../utils/taxCalculators';
 
 const SavingsCalculator80C = () => {
     const [invested, setInvested] = useState('');
@@ -7,14 +7,12 @@ const SavingsCalculator80C = () => {
 
     const isValid = invested !== '' && !isNaN(invested);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
             if (!isValid) return;
-            const response = await axios.post('http://localhost:8000/api/calculate-80c/', {
-                invested: invested
-            });
-            setResult(response.data);
+            const res = calculate80CSuggestions(Number(invested));
+            setResult(res);
         } catch (error) {
             console.error(error);
         }

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+import { getBotResponse } from '../utils/taxCalculators';
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,14 +28,14 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/chat/', {
-                message: userMessage
-            });
-            const botResponse = response.data.response;
-            setMessages(prev => [...prev, { text: botResponse, isUser: false }]);
+            // Simulate network delay for "thinking" effect
+            setTimeout(() => {
+                const botResponse = getBotResponse(userMessage);
+                setMessages(prev => [...prev, { text: botResponse, isUser: false }]);
+                setIsLoading(false);
+            }, 600);
         } catch (error) {
-            setMessages(prev => [...prev, { text: "Sorry, I'm having trouble connecting right now.", isUser: false }]);
-        } finally {
+            setMessages(prev => [...prev, { text: "Sorry, I'm having trouble processing that right now.", isUser: false }]);
             setIsLoading(false);
         }
     };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateAdvanceTax } from '../utils/taxCalculators';
 
 const AdvanceTaxCalculator = () => {
     const [liability, setLiability] = useState('');
@@ -7,14 +7,12 @@ const AdvanceTaxCalculator = () => {
 
     const isValid = liability && !isNaN(liability) && Number(liability) > 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
             if (!isValid) return;
-            const response = await axios.post('http://localhost:8000/api/calculate-advance-tax/', {
-                tax_liability: liability
-            });
-            setSchedule(response.data);
+            const res = calculateAdvanceTax(Number(liability));
+            setSchedule(res);
         } catch (error) {
             console.error(error);
         }

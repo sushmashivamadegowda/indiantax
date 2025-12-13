@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateCompositionTax } from '../utils/taxCalculators';
 
 const CompositionSchemeCalculator = () => {
     const [turnover, setTurnover] = useState('');
@@ -10,7 +10,7 @@ const CompositionSchemeCalculator = () => {
 
     const isValid = turnover && !isNaN(turnover) && Number(turnover) > 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!isValid) return;
 
@@ -19,15 +19,15 @@ const CompositionSchemeCalculator = () => {
         setResult(null);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/calculate-composition-scheme/', {
-                turnover: parseFloat(turnover),
-                business_type: businessType
-            });
-            setResult(response.data);
+            // Simulate API delay
+            setTimeout(() => {
+                const res = calculateCompositionTax(parseFloat(turnover), businessType);
+                setResult(res);
+                setLoading(false);
+            }, 500);
         } catch (error) {
             console.error(error);
             setError('Failed to calculate. Please try again.');
-        } finally {
             setLoading(false);
         }
     };

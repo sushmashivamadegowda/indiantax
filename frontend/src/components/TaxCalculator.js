@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { calculateTax } from '../utils/taxCalculators';
 import ResultsCard from './ResultsCard';
 
 const TaxCalculator = () => {
@@ -27,7 +27,7 @@ const TaxCalculator = () => {
 
   const isValid = formData.salary && !isNaN(formData.salary) && Number(formData.salary) > 0;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!isValid) return;
 
@@ -36,21 +36,24 @@ const TaxCalculator = () => {
     setResults(null);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/calculate-tax/', {
-        salary: parseFloat(formData.salary) || 0,
-        hra: parseFloat(formData.hra) || 0,
-        lta: parseFloat(formData.lta) || 0,
-        deduction80C: parseFloat(formData.deduction80C) || 0,
-        deduction80D: parseFloat(formData.deduction80D) || 0,
-        age: formData.age,
-        financial_year: financialYear
-      });
+      // Simulate a small delay for better UX (optional, but feels "app-like")
+      setTimeout(() => {
+        const result = calculateTax({
+          salary: parseFloat(formData.salary) || 0,
+          hra: parseFloat(formData.hra) || 0,
+          lta: parseFloat(formData.lta) || 0,
+          deduction80C: parseFloat(formData.deduction80C) || 0,
+          deduction80D: parseFloat(formData.deduction80D) || 0,
+          age: formData.age,
+          financial_year: financialYear
+        });
 
-      setResults(response.data);
+        setResults(result);
+        setLoading(false);
+      }, 300);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to calculate tax. Please check your inputs.');
+      setError('Failed to calculate tax. Please check your inputs.');
       console.error('Error calculating tax:', err);
-    } finally {
       setLoading(false);
     }
   };

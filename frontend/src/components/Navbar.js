@@ -1,16 +1,8 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
     const location = useLocation();
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
 
     const isActive = (path) => location.pathname === path;
 
@@ -41,36 +33,6 @@ const Navbar = () => {
                             >
                                 Learn
                             </Link>
-                        </div>
-
-                        {/* Auth Buttons */}
-                        <div>
-                            {user ? (
-                                <div className="flex items-center space-x-4">
-                                    <span className="text-gray-300 text-sm hidden sm:block">Hi, {user.username}</span>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="bg-red-600/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600/30 transition-all"
-                                    >
-                                        Logout
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex items-center space-x-4">
-                                    <Link
-                                        to="/login"
-                                        className="text-gray-300 hover:text-white font-medium text-sm transition-colors"
-                                    >
-                                        Login
-                                    </Link>
-                                    <Link
-                                        to="/signup"
-                                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20"
-                                    >
-                                        Sign Up
-                                    </Link>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
